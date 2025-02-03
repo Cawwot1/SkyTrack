@@ -117,8 +117,10 @@ if __name__ == "__main__":
         print(f"Chosen {chosen_profile_name} profile")
 
     #TEST
+    """
     with open('output.json', 'w') as file:
         json.dump(chosen_profile, file, indent=4)
+    """
 
     """
     Profile Specifics - SKILLS
