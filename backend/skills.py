@@ -11,9 +11,9 @@ def get_skill_level(xp):
     level = 0
     next_threshold = None  # Default value in case xp is greater than the last threshold
     for lvl, threshold in xp_thresholds:
-        print(xp)          # Debugging to see current xp
-        print(threshold)   # Debugging to see threshold value
-        print(level)       # Debugging to see current level
+        #print(xp)          # Debugging to see current xp
+        #print(threshold)   # Debugging to see threshold value
+        #print(level)       # Debugging to see current level
         if xp >= threshold:
             level = lvl
             xp -= threshold
@@ -41,6 +41,7 @@ def get_skyblock_profiles(player_uuid):
 
 #USE LATER
 def profile_selector(cute_name):
+
     if profiles:
         for profile in profiles:
             if profile['cute_name'] == cute_name:
@@ -49,9 +50,9 @@ def profile_selector(cute_name):
         return None
 
 # TEMP KEY
-API_KEY = "8123cc0b-42aa-4ab6-a022-9802ff7eb1b4"
+API_KEY = "da387712-bc64-4b7e-b637-8375b30b1eaf"
 BASE_URL = "https://api.hypixel.net/v2/skyblock"
-player_uuid = '421ef1ee18854aeb933910160ac19f79' #UUID for BankInterest
+player_uuid = 'd874fac3f59d44fab9389f240674bc59' #UUID for Cawwot1
 
 """
 Main Operations
@@ -66,16 +67,47 @@ if __name__ == "__main__":
     #Gets all profile based on Player UUID
     profiles = get_skyblock_profiles(player_uuid)   
 
-    ### TEMP DISPLAY (REMOVE ONCE FRONTEND COMPLETE) - prints out all the diffent profiles the player has
-    for profile in profiles:
+    normal_mode = []
+    stranded_mode = []
+    bingo_mode = []
+
+    for profile in profiles: #Gamemode Checker 
+
+        while True:
+
+            try: #game_mode dosen't exist in normal_mode profiles
+                profile['game_mode']
+            except KeyError:
+                normal_mode.append(profile)
+                break
+            
+            if profile['game_mode'] == "island":
+                stranded_mode.append(profile)
+            elif profile['game_mode'] == "bingo":
+                bingo_mode.append(profile)
+            else:
+                print("Error: Gamemode not identifiable")
+                print(f"Profile ID: {profile['profile_id']}, Name: {profile['cute_name']}")
+                print(profile['game_mode'])
+            break
+
+   ### TEMP DISPLAY (REMOVE ONCE FRONTEND COMPLETE) - prints out all the diffent profiles the player has
+    print("\n----Normal Mode----\n")
+    for profile in normal_mode:
+        print(f"Profile ID: {profile['profile_id']}, Name: {profile['cute_name']}")
+    print("\n----Stranded Mode----\n")
+    for profile in stranded_mode:
+        print(f"Profile ID: {profile['profile_id']}, Name: {profile['cute_name']}")
+    print("\n----Bingo Mode----\n")
+    for profile in bingo_mode:
         print(f"Profile ID: {profile['profile_id']}, Name: {profile['cute_name']}")
 
     """
-    Choosing Profile
+    \nChoosing Profile
     """
 
     #Gets profile that the user wants to select (based on cute_name)
-    chosen_profile_name = input("Which profile do you want to access? ")
+    chosen_profile_name = input("\nWhich profile do you want to access? ")
 
     chosen_profile = profile_selector(chosen_profile_name)
 
@@ -183,8 +215,6 @@ if __name__ == "__main__":
 
     # Calculate and store levels for each skill (excluding social, runecraft & dungeons)
     for skill, data in skill_dict.items():
-        print(skill)
-        print(data)
         if skill not in ["social", "runecraft", "dungeon", "carpentry", 'fishing', 'farming']:
             skill_dict[skill]['level'], skill_dict[skill]["current_xp"], skill_dict[skill]["next_threshold"] = get_skill_level(data['total_xp'])
         else:
@@ -193,5 +223,7 @@ if __name__ == "__main__":
     print(
         f"\n--Profile Skills--",
         f"\nCombat Level: {skill_dict['combat']['level']} ({skill_dict['combat']['total_xp']} total xp) -> {skill_dict['combat']['current_xp']} / {skill_dict['combat']['next_threshold']}"
+        f"\n"
     )
+
 
