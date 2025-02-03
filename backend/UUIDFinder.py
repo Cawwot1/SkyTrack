@@ -1,6 +1,6 @@
 import requests
 
-PLAYER_NAME = "BankInterest"
+PLAYER_NAME = "Cawwot1"
 
 def get_player_uuid(player_name):
     url = f"https://api.mojang.com/users/profiles/minecraft/{player_name}"
